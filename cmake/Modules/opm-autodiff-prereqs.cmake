@@ -21,4 +21,5 @@ set (opm-autodiff_DEPS
 	# Eigen
 	"Eigen3 3.1 REQUIRED"
     "opm-parser REQUIRED"
+    "cjson REQUIRED"
 	)
