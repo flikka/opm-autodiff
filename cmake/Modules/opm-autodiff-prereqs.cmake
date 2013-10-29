@@ -20,4 +20,5 @@ set (opm-autodiff_DEPS
 	opm-core REQUIRED"
 	# Eigen
 	"Eigen3 3.1 REQUIRED"
+    "opm-parser REQUIRED"
 	)
