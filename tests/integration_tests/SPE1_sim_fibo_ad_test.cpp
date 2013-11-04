@@ -120,8 +120,13 @@ std::vector<BlackoilState> runWithNewParser(parameter::ParameterGroup param) {
     old_deck->setCurrentEpoch(old_deck->numberOfEpochs() - 1);
     simtimer.init(*old_deck);
     const double total_time = simtimer.totalTime();
-    for (int epoch = 0; epoch < old_deck->numberOfEpochs(); ++epoch) {
-        // Set epoch index.
+    int numEpochsOld = old_deck->numberOfEpochs();
+    int numEpochsNew = schedule_deck->getTimeMap()->size();
+    
+    std::cout << "Old " << numEpochsOld << " New: " << numEpochsNew << "\n";
+
+    for (size_t epoch = 0; epoch < schedule_deck->getTimeMap()->size() - 1; ++epoch) { //We also have the startdate a timestep
+        // Set epoch index
         old_deck->setCurrentEpoch(epoch);
 
         // Update the timer.
@@ -282,17 +287,17 @@ std::vector<BlackoilState> runWithOldParser(parameter::ParameterGroup param) {
 BOOST_AUTO_TEST_CASE(SPE1_runWithOldAndNewParser_BlackOilStateEqual) {
     Parser * parser = new Parser();
     DeckConstPtr deck = parser->parse("SPE1_opm.DATA", true);
-//    ScheduleConstPtr schedule_deck(new Schedule(deck));
-    //int argc = 2;
-    //const char ** argv = (const char **)malloc(2* sizeof(argv));
-    //argv[1] = "spe1.xml";
-    //parameter::ParameterGroup param(argc, argv, false);
+    ScheduleConstPtr schedule_deck(new Schedule(deck));
+    int argc = 2;
+    const char ** argv = (const char **)malloc(2* sizeof(argv));
+    argv[1] = "spe1.xml";
+    parameter::ParameterGroup param(argc, argv, false);
     
-    //std::vector<BlackoilState> runWithOldParserStates = runWithOldParser(param);
-    //std::vector<BlackoilState> runWithNewParserStates = runWithNewParser(param);
-//    
-//    for(size_t i=0; i<runWithOldParserStates.size(); i++) {
-//        BOOST_CHECK(runWithOldParserStates[i].equals(runWithNewParserStates[i]));
-//    }
+    std::vector<BlackoilState> runWithOldParserStates = runWithOldParser(param);
+    std::vector<BlackoilState> runWithNewParserStates = runWithNewParser(param);
+    
+    for(size_t i=0; i<runWithOldParserStates.size(); i++) {
+        BOOST_CHECK(runWithOldParserStates[i].equals(runWithNewParserStates[i]));
+    }
 }
 
