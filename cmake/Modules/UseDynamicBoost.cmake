@@ -1,5 +1,7 @@
 # be sure that this component is searched for
-find_package (Boost COMPONENTS unit_test_framework QUIET)
+if (NOT ${Boost_UNIT_TEST_FRAMEWORK_FOUND})
+  find_package (Boost COMPONENTS unit_test_framework QUIET)
+endif()
 
 if (${Boost_UNIT_TEST_FRAMEWORK_FOUND})
   # setup to do a test compile
